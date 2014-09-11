@@ -4,21 +4,11 @@ Games = new Meteor.Collection("games");
 
 if (Meteor.isClient) {
 
-  timer = new Tracker.Dependency();
-
-  Template.clock.rendered = function () {
-    window.setInterval(function(){
-      timer.changed();
-    }, 500);
-  };
-
-
   Template.clock.helpers({
     timeleft: function (obj) {
       var game = Games.findOne();
       if(!game) return;
 
-      timer.depend();
       var gameLength = game.gameLength;
       var currentPlayer = obj.hash.player - 1;
       var currentPlayerTime = game.playerTimes[currentPlayer];
@@ -28,7 +18,8 @@ if (Meteor.isClient) {
         return moment(gameLength - currentPlayerTime).format("m:ss");
       }
 
-      var timeSinceLastTurn = moment().diff(game.lastTurn); // difference between now and last turn
+      var serverTime = TimeSync.serverTime();
+      var timeSinceLastTurn = moment(serverTime).diff(game.lastTurn); // difference between now and last turn
       var millisecondsRemaining = gameLength - timeSinceLastTurn - currentPlayerTime;
       return moment(millisecondsRemaining).format("m:ss");
     }
