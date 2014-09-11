@@ -1,0 +1,29 @@
+<head>
+  <title>chessclock</title>
+</head>
+
+<body>
+	{{!-- {{> setup }} --}}
+  {{> clock }}
+</body>
+
+
+<template name="setup">
+	<div class="setup">
+		<input type="text" name="gamelength">
+		<input type="text" name="bonus">
+	</div>
+</template>
+
+
+<template name="clock">
+  <div class="player player1">
+	  <h1>{{timeleft player=1}}</h1>
+	  <button data-player="1">Player 1 hat gespielt</button>
+  </div>
+    
+  <div class="player player2">
+	  <h1>{{timeleft player=2}}</h1>
+	  <button data-player="2">Player 2 hat gespielt</button>
+  </div>
+</template>

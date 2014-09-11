@@ -1,0 +1,9 @@
+/* CSS declarations go here */
+
+.player {
+	display: inline-block;
+	width: 200px;
+	background-color: rgba(0,0,0,.1);
+	text-align: center;
+	padding: 20px 0;
+}
