@@ -1,0 +1,13 @@
+<template name="game">
+  <div class="player player1 {{active}}">
+  	<h2>{{playerName1}}</h2>
+	  <h1>{{timeleft player=1}}</h1>
+  </div>
+   
+  <div class="player player2 {{active}}">
+  	<h2>{{playerName2}}</h2>
+	  <h1>{{timeleft player=2}}</h1>
+  </div>
+  
+  <button id="nextplayer">Next Player</button>
+</template>
