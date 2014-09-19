@@ -1,6 +1,8 @@
-// XXX: pause game when timer below 0:00
 // XXX: add pause/go button
+// XXX: pause game when timer below 0:00
+// XXX: bool gameEnded, gamePaused
 // XXX: styling
+// XXX: spacebar to switch turn
 
 Template.game.helpers({
   playerName1: function () {
