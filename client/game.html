@@ -1,13 +1,26 @@
 <template name="game">
-  <div class="player player1 {{active}}">
-  	<h2>{{playerName1}}</h2>
-	  <h1>{{timeleft player=1}}</h1>
-  </div>
-   
-  <div class="player player2 {{active}}">
-  	<h2>{{playerName2}}</h2>
-	  <h1>{{timeleft player=2}}</h1>
-  </div>
-  
-  <button id="nextplayer">Next Player</button>
+	<div class="jumbotron row">
+		<div class="col-xs-6 col-sm-4 {{active 1}}">
+			<h2>{{playerName1}}</h2>
+			<h1>{{timeleft 1}}</h1>
+		</div>
+		 
+		<div class="col-xs-6 col-sm-4 {{active 2}}">
+			<h2>{{playerName2}}</h2>
+			<h1>{{timeleft 2}}</h1>
+		</div>
+
+		<div class="col-xs-10 col-xs-push-1 col-sm-push-0 col-sm-4 well">
+			
+			<button class="btn btn-block" id="pausePlay">
+				{{pausePlayText}}
+			</button>
+
+			<button class="btn btn-block btn-primary {{#if paused}}disabled{{/if}}" id="nextplayer">
+				Next Player
+			</button>
+
+		</div>
+	</div>
+	
 </template>

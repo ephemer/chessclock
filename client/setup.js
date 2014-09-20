@@ -10,7 +10,7 @@ Template.setup.events({
 			gameName: $("#gameName").val(),
 		};
 
-		Meteor.call("createGame", gameData, function (err, res) {
+		Meteor.call("game/create", gameData, function (err, res) {
 			if(err) return alert(err);
 
 			// res is actually the game's _id, not its name

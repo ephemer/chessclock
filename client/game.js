@@ -1,32 +1,50 @@
-// XXX: add pause/go button
-// XXX: pause game when timer below 0:00
-// XXX: bool gameEnded, gamePaused
 // XXX: styling
 // XXX: spacebar to switch turn
 
 Template.game.helpers({
+  active: function (player) {
+    
+    var game = Template.currentData() || {};
+    player--; // player is 1-indexed
+
+    if (player === game.currentPlayer) return 'bg-success';
+
+  },
+  
   playerName1: function () {
     return this.playerName1 || "Player 1";
   },
   playerName2: function () {
     return this.playerName2 || "Player 2";
   },
-  timeleft: function (obj) {
+
+  pausePlayText: function () {
+    if(this.ended) return "Restart";
+    if(this.paused) return "Play";
+    return "Pause";
+  },
+
+  timeleft: function (player) {
     var game = Template.currentData();
     if(!game) return;
 
+    player--; // It's 1-indexed
     var gameLength = game.gameLength;
-    var currentPlayer = obj.hash.player - 1;
-    var currentPlayerTime = game.playerTimes[currentPlayer];
+    var playerTime = game.playerTimes[player];
 
-    if(currentPlayer !== game.currentPlayer){
+
+    // Pausing the game is the same as it being neither player's turn
+    if( game.paused || player !== game.currentPlayer){
       // return gamelength - this player's time
-      return moment(gameLength - currentPlayerTime).format("m:ss");
+      return moment(gameLength - playerTime).format("m:ss");
     }
 
-    var serverTime = TimeSync.serverTime();
-    var timeSinceLastTurn = moment(serverTime).diff(game.lastTurn); // difference between now and last turn
-    var millisecondsRemaining = gameLength - timeSinceLastTurn - currentPlayerTime;
+    var now = TimeSync.serverTime();
+    var timeSincelastAction = moment(now).diff(game.lastAction);
+    var millisecondsRemaining = gameLength - timeSincelastAction - playerTime;
+    
+    if(millisecondsRemaining <= 0) Meteor.call("game/ended", this._id);
+
     return moment(millisecondsRemaining).format("m:ss");
   }
 });
@@ -34,6 +52,9 @@ Template.game.helpers({
 
 Template.game.events({
   'click button#nextplayer': function () {
-    Meteor.call("changePlayer", this._id);
+    Meteor.call("game/switchPlayer", this._id);
+  },
+  'click button#pausePlay': function () {
+    Meteor.call("game/playPause", this._id);
   }
 });
