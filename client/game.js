@@ -1,12 +1,11 @@
-// XXX: styling
+// XXX: styling - make the green box not extend to the edges
 // XXX: spacebar to switch turn
 
 Template.game.helpers({
   active: function (player) {
+    player--; // player is 1-indexed
     
     var game = Template.currentData() || {};
-    player--; // player is 1-indexed
-
     if (player === game.currentPlayer) return 'bg-success';
 
   },
