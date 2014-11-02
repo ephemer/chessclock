@@ -38,6 +38,7 @@ Template.game.helpers({
       return moment(gameLength - playerTime).format("m:ss");
     }
 
+    // don't trust the client's clock time to be accurate
     var now = TimeSync.serverTime();
     var timeSincelastAction = moment(now).diff(game.lastAction);
     var millisecondsRemaining = gameLength - timeSincelastAction - playerTime;

@@ -1,21 +1,32 @@
-Router.map(function() {
-  this.route('home', {
-  	path: '/',
-  	template: 'setup'
-  });
+Router.route('/', function () {
+  	this.render('setup');
+});
 
-  this.route('game', {
-  	path: '/:gameName',
-    onBeforeAction: function () {
-      // If we're on a route named after the id, switch URL to actual game name
-      var gamesWithId = Games.find(this.params.gameName);
-      if( gamesWithId.count() ){
-        var realGameName = gamesWithId.fetch()[0].gameName;
-        Router.go('game', {gameName: realGameName});
-      }
-    },
-  	data: function () {
-  		return Games.findOne({gameName: this.params.gameName});
-  	}
-  });
+
+Router.route('/:gameName', function () {
+  // If we're on a route named after the id, switch URL to actual game name
+  var gameWithId = Games.find({_id: this.params.gameName}, {reactive: false});
+
+  if( gameWithId.count() ){
+    var realGameName = gameWithId.fetch()[0].gameName;
+    if (realGameName) {
+      return this.redirect('/' + realGameName);
+    }
+  }
+  
+
+
+  if (this.ready()) {
+    var gameData = Games.findOne();
+    if (!gameData) return this.redirect('/');
+    // Actually render the template with our real data if everything else checks out:
+    this.render('game', {data: gameData})
+  }
+
+
+}, {
+  name: "game",
+  waitOn: function () {
+    return Meteor.subscribe('games', this.params.gameName);
+  }
 });
