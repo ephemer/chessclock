@@ -13,8 +13,6 @@ Router.route('/:gameName', function () {
       return this.redirect('/' + realGameName);
     }
   }
-  
-
 
   if (this.ready()) {
     var gameData = Games.findOne();

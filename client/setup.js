@@ -1,4 +1,9 @@
 Template.setup.events({
+	'keyup #gameName': function (e, tmpl) {
+		var gameName = tmpl.$("#gameName").val();
+
+		tmpl.gameName.set(_.slugify(gameName));
+	},
 	'submit form': function (e) {
 		e.preventDefault();
 
@@ -17,5 +22,17 @@ Template.setup.events({
 			// we fix this in the game route's onBeforeAction
 			Router.go("game", {gameName: res});
 		});
+	}
+});
+
+Template.setup.created = function () {
+	this.gameName = new ReactiveVar("");
+};
+
+
+Template.setup.helpers({
+	gameName: function () {
+		var tmpl = Template.instance();
+		return tmpl.gameName.get() || "your-game-name";
 	}
 });
