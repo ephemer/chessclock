@@ -1,18 +1,17 @@
-// XXX: styling - make the green box not extend to the edges
-// XXX: spacebar to switch turn
-
 Template.game.helpers({
   active: function (player) {
-    player--; // player is 1-indexed
+    // in the template, "player" is 1-indexed
+    // whereas game.currentPlayer is 0-indexed:
+    player--;
     
     var game = Template.currentData() || {};
     if (player === game.currentPlayer) return 'bg-success';
-
   },
   
   playerName1: function () {
     return this.playerName1 || "Player 1";
   },
+
   playerName2: function () {
     return this.playerName2 || "Player 2";
   },
@@ -54,7 +53,9 @@ Template.game.events({
   'click button#nextplayer': function () {
     Meteor.call("game/switchPlayer", this._id);
   },
-  'click button#pausePlay': function () {
-    Meteor.call("game/playPause", this._id);
+  'click button#pausePlay': function (e, tmpl) {
+    Meteor.call("game/playPause", this._id, function () {
+      tmpl.$("button#nextplayer").focus();
+    });
   }
 });
